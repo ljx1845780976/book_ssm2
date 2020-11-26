@@ -1,0 +1,66 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <!--配置spring的监听器让spring整合springMVC但是系统默认只加载WEB-INF里的xml文件-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!--所以为了加载到applicationContext.xml，需要配置文件路径-->
+   <context-param>
+     <param-name>contextConfigLocation</param-name>
+     <param-value>classpath:ApplicationContext.xml</param-value>
+   </context-param>
+
+  <!--配置前端控制器-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:SpringMVC.xml</param-value>
+    </init-param>
+     <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  <!--解决中文乱码-->
+   <filter>
+     <filter-name>characterEncodingFilter</filter-name>
+     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+<init-param>
+  <param-name>encoding</param-name>
+  <param-value>UTF-8</param-value>
+</init-param>
+   </filter>
+  <filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>kt</servlet-name>
+    <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>kt</servlet-name>
+    <url-pattern>/kaptcha.jpg</url-pattern>
+  </servlet-mapping>
+
+  <!--error配置标签，服务器出错自动跳转到设置的页面-->
+  <error-page>
+    <!--错误类型-->
+    <error-code>500</error-code>
+    <!--表示错误发送时要跳转的页面-->
+    <location>/pages/error/error500.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/pages/error/error404.jsp</location>
+  </error-page>
+</web-app>
